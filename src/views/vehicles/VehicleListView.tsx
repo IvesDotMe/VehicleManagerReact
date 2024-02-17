@@ -1,26 +1,26 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { IVehicleService } from "../../services/IVehicleService"
-import { VehicleMockService } from "../../services/VehicleMockService"
-import { Vehicle } from "../../types/Vehicle";
+import { VehicleDto } from "../../types/Vehicle";
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { VehicleService } from "../../services/VehicleService";
 
 export const VehicleListView: React.FC = () => {
-	const vehicleService = useRef<IVehicleService>(new VehicleMockService());
+	const vehicleService = useRef<IVehicleService>(new VehicleService());
 	const [loading, setLoading] = useState(true);
-	const [vehicleData, setVehicleData] = useState<Vehicle[]>([]);
+	const [vehicleData, setVehicleData] = useState<VehicleDto[]>([]);
+	const location = useLocation();
 
 	const fetchData = useCallback(async () => {
 		setLoading(true);
 		const data = await vehicleService.current.GetList();
-		console.log(data)
 		setVehicleData(data);
 		setLoading(false);
 	}, [vehicleService]);
 
 	useEffect(() => {
 		fetchData();
-	}, [fetchData]);
+	}, [fetchData, location]);
 	return <>
 		{loading
 			? 'Loading ...'
@@ -42,10 +42,10 @@ export const VehicleListView: React.FC = () => {
 							<TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}	>
 								<TableCell component="th" scope="row"> {row.name} </TableCell>
 								<TableCell>{row.licensePlate}</TableCell>
-								<TableCell>{row.isAvailable ? 'Yes' : 'Nah'}</TableCell>
-								<TableCell>{row.purchaseDate.toDateString()}</TableCell>
+								<TableCell>{row.isActive ? 'Yes' : 'Nah'}</TableCell>
+								<TableCell>{row.purchaseMoment?.format('MMM/YYYY')}</TableCell>
 								<TableCell>{row.makeId}</TableCell>
-								<TableCell align="center">  <Button component={Link} to={`/vehicles/1`}>Edit</Button>
+								<TableCell align="center">  <Button component={Link} to={`/vehicles/${row.id}`}>Edit</Button>
 									<Button component={Link} to={`/vehicles/1`}>Delete</Button></TableCell>
 							</TableRow>
 						))}

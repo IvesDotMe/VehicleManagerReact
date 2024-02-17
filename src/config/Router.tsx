@@ -1,5 +1,5 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
-import Form1 from "../views/Form";
+import VehicleFormView from "../views/vehicles/VehicleFormView";
 import { VehicleIndex } from "../views/vehicles/VehicleIndex";
 import Layout from "../components/Layout";
 
@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
 				children: [
 					{
 						path: '/vehicles/:vehicleId',
-						element: <Form1></Form1>
+						element: <VehicleFormView></VehicleFormView>
 					}
 				]
 			},
