@@ -1,5 +1,5 @@
 import { AppBar, Box, Button, Drawer, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, Switch, TextField, Toolbar, Typography } from "@mui/material";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import CloseIcon from '@mui/icons-material/Close';
@@ -8,15 +8,18 @@ import { VehicleDto } from "../../types/Vehicle";
 import { DatePicker } from "@mui/x-date-pickers";
 import { IVehicleService } from "../../services/IVehicleService";
 import { VehicleService } from "../../services/VehicleService";
-
+import { MyContextType, MyContext } from "../../MyContext";
 
 export default function VehicleFormView() {
+	const { saveS } = useContext<MyContextType>(MyContext);
+
 	const navigate = useNavigate();
 	const params = useParams();
 	const [drawerOpen, setDrawerState] = useState(false);
 	const vehicleService = useRef<IVehicleService>(new VehicleService());
 	const { register, handleSubmit, formState: { errors }, control, reset } = useForm<VehicleDto>({ defaultValues: { isActive: true, name: '', licensePlate: '' } });
 	const onSubmit: SubmitHandler<VehicleDto> = async data => {
+		saveS('hey');
 		console.log(data);
 		await vehicleService.current.Save(data);
 		navigate('/vehicles', { replace: true });

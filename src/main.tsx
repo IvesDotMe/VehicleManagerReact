@@ -9,6 +9,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import { themeLight } from './config/Theme.light.tsx'
 import localforage from 'localforage'
+import MyProvider from './MyProvider.tsx'
 
 const theme = await localforage.getItem<string>('theme');
 const s = (theme === 'light' ? themeLight : themeDark);
@@ -18,7 +19,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 		<ThemeProvider theme={s}>
 			<CssBaseline />
 			<LocalizationProvider dateAdapter={AdapterMoment}>
-				<RouterProvider router={router} />
+				<MyProvider >
+					<RouterProvider router={router} />
+				</MyProvider>
 			</LocalizationProvider>
 		</ThemeProvider>
 	</React.StrictMode>,
