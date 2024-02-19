@@ -5,6 +5,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { useCallback, useEffect, useState } from "react";
 import localforage from "localforage";
+import AutohideSnackbar from "./SnackBar";
 
 export default function Layout() {
 	const [alignment, setAlignment] = useState<string>('dark');
@@ -45,6 +46,7 @@ export default function Layout() {
 				</Toolbar>
 			</AppBar>
 			<Outlet></Outlet>
+			<AutohideSnackbar></AutohideSnackbar>
 		</Box>
 	)
 }

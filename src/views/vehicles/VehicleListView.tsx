@@ -4,10 +4,12 @@ import { VehicleDto } from "../../types/Vehicle";
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import { VehicleService } from "../../services/VehicleService";
-import { MyContextType, MyContext } from "../../MyContext";
+import { MyContextType, MyContext } from "../../context/MyContext";
+import { SnackBarContextType, SnackBarContext } from "../../context/SnackBarContext";
 
 export const VehicleListView: React.FC = () => {
 	const { s } = useContext<MyContextType>(MyContext);
+	const { snackBarState } = useContext<SnackBarContextType>(SnackBarContext);
 
 	const vehicleService = useRef<IVehicleService>(new VehicleService());
 	const [loading, setLoading] = useState(true);
@@ -32,7 +34,7 @@ export const VehicleListView: React.FC = () => {
 				<Table sx={{ minWidth: 650 }} aria-label="simple table">
 					<TableHead>
 						<TableRow>
-							<TableCell>Name {s}</TableCell>
+							<TableCell>Name {s} - {snackBarState.counter} - {snackBarState.random}</TableCell>
 							<TableCell>License Plate</TableCell>
 							<TableCell>Available</TableCell>
 							<TableCell>Purchase Date</TableCell>

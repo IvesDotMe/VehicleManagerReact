@@ -8,10 +8,13 @@ import { VehicleDto } from "../../types/Vehicle";
 import { DatePicker } from "@mui/x-date-pickers";
 import { IVehicleService } from "../../services/IVehicleService";
 import { VehicleService } from "../../services/VehicleService";
-import { MyContextType, MyContext } from "../../MyContext";
+import { MyContextType, MyContext } from "../../context/MyContext";
+import { SnackBarContext, SnackBarContextType } from "../../context/SnackBarContext";
 
 export default function VehicleFormView() {
 	const { saveS } = useContext<MyContextType>(MyContext);
+
+	const { snackBarState, dispatch } = useContext<SnackBarContextType>(SnackBarContext);
 
 	const navigate = useNavigate();
 	const params = useParams();
@@ -51,6 +54,15 @@ export default function VehicleFormView() {
 				</Toolbar>
 			</AppBar>
 			<Paper sx={{ p: 3, width: '600px' }}>
+
+				<button onClick={() => dispatch({ type: 'increment', payload: 10 })}>
+					"Increment" Action
+				</button>
+				<button onClick={() => dispatch({ type: 'random' })}>
+					"Random" Action
+				</button>
+
+				{snackBarState.counter} - {snackBarState.random}
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<input type="hidden" {...register('id')} />
 					<Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, mb: 1 }}>

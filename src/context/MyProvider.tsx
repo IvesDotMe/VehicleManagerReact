@@ -1,6 +1,6 @@
 import React from 'react';
-import { StoreProviderProp, MyContext } from './MyContext';
-
+import { MyContext } from './MyContext';
+import { StoreProviderProp } from '../types/StoreProviderProp';
 
 
 const MyProvider: React.FC<StoreProviderProp> = (props) => {
