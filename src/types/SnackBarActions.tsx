@@ -1,19 +1,29 @@
-export interface SnackBarState {
-	counter: number;
-	random: number;
+export enum NotificationType {
+	Success = "success",
+	Error = "error",
+	Warning = "warning",
+	Info = "info",
 }
 
-type Increment = { type: 'increment'; payload: number };
-type Random = { type: 'random' };
+export type SnackBarState = {
+	open: boolean;
+	message: string;
+	notificationType: NotificationType;
+};
 
-export type SnackBarActions = Increment | Random;
+
+type Show = { type: 'show'; notificationType: NotificationType, message: string };
+type Hide = { type: 'hide'; };
+
+export type SnackBarActions = Show | Hide;
+
 
 export function snackBarReducer(snackBarState: SnackBarState, action: SnackBarActions) {
 	switch (action.type) {
-		case 'increment':
-			return { ...snackBarState, counter: snackBarState.counter + action.payload };
-		case 'random':
-			return { ...snackBarState, random: Math.random() };
+		case 'show':
+			return { ...snackBarState, message: action.message, type: action.notificationType, open: true };
+		case 'hide':
+			return { ...snackBarState, open: false };
 		default:
 			return snackBarState;
 	}

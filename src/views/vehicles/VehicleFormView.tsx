@@ -10,17 +10,21 @@ import { IVehicleService } from "../../services/IVehicleService";
 import { VehicleService } from "../../services/VehicleService";
 import { MyContextType, MyContext } from "../../context/MyContext";
 import { SnackBarContext, SnackBarContextType } from "../../context/SnackBarContext";
+import { NotificationType } from "../../types/SnackBarActions";
+import { VariantType, useSnackbar } from "notistack";
 
 export default function VehicleFormView() {
+	const { enqueueSnackbar } = useSnackbar();
+
 	const { saveS } = useContext<MyContextType>(MyContext);
 
-	const { snackBarState, dispatch } = useContext<SnackBarContextType>(SnackBarContext);
+	const { dispatch } = useContext<SnackBarContextType>(SnackBarContext);
 
 	const navigate = useNavigate();
 	const params = useParams();
 	const [drawerOpen, setDrawerState] = useState(false);
 	const vehicleService = useRef<IVehicleService>(new VehicleService());
-	const { register, handleSubmit, formState: { errors }, control, reset } = useForm<VehicleDto>({ defaultValues: { isActive: true, name: '', licensePlate: '' } });
+	const { register, handleSubmit, formState, control, reset } = useForm<VehicleDto>({ defaultValues: { isActive: true, name: '', licensePlate: '' } });
 	const onSubmit: SubmitHandler<VehicleDto> = async data => {
 		saveS('hey');
 		console.log(data);
@@ -40,6 +44,11 @@ export default function VehicleFormView() {
 		setDrawerState(true);
 	}, [fetchData]);
 
+	const handleClickVariant = (variant: VariantType) => () => {
+		// variant could be success, error, warning, info, or default
+		enqueueSnackbar('This is a success message!', { variant });
+	};
+
 	return (
 
 		<Drawer anchor={"right"} open={drawerOpen} onClose={() => navigate(-1)} >
@@ -55,14 +64,14 @@ export default function VehicleFormView() {
 			</AppBar>
 			<Paper sx={{ p: 3, width: '600px' }}>
 
-				<button onClick={() => dispatch({ type: 'increment', payload: 10 })}>
+				<button onClick={() => dispatch({ type: 'show', notificationType: NotificationType.Success, message: 'Yep Saved' })}>
 					"Increment" Action
 				</button>
-				<button onClick={() => dispatch({ type: 'random' })}>
+				<button onClick={() => dispatch({ type: 'hide' })}>
 					"Random" Action
 				</button>
-
-				{snackBarState.counter} - {snackBarState.random}
+				<Button onClick={handleClickVariant('success')}>Show success snackbar</Button>
+				{/* {snackBarState.counter} - {snackBarState.random} */}
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<input type="hidden" {...register('id')} />
 					<Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, mb: 1 }}>
@@ -124,6 +133,7 @@ export default function VehicleFormView() {
 					<Button variant="contained" endIcon={<SendIcon />} type="submit">Send</Button>
 
 				</form>
+				<pre>{JSON.stringify(formState, null, 2)}</pre>
 			</Paper>
 		</Drawer >
 
